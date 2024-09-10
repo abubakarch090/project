@@ -1,8 +1,9 @@
+import { useRouter } from "next/router";
 import Back from "./Back";
 
 
 const Step8 = ({ setSelect }) => {
-
+const router = useRouter ();
 
 
 
@@ -96,7 +97,9 @@ const Step8 = ({ setSelect }) => {
 
                 <div className='flex justify-center'>
 
-                    <button className='bg-red-600 hover:bg-red-700 my-2 mt-12 p-2 w-[55%] rounded-full text-white  text-lg'>
+                    <button className='bg-red-600 hover:bg-red-700 my-2 mt-12 p-2 w-[55%] rounded-full text-white  text-lg'
+                    onClick={()=>router.push("/Profile")}
+                    >
                         Next
                     </button>
 

@@ -29,6 +29,7 @@ const Step5 = ({setSelect}) => {
 
                 <div className='h-2 rounded-lg  bg-gray-300 mt-20 w-[90%] mx-auto'>
                     <div className='h-2 bg-red-500 w-[60%]  rounded-lg'></div>
+                    
                 </div>
 
                 <div className='w-[90%] mx-auto mt-4'>

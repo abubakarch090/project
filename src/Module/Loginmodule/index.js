@@ -1,6 +1,8 @@
+import { useRouter } from "next/router"
 
 
 const LoginModule = () => {
+    const router=useRouter();
     return (
         <>
 
@@ -37,7 +39,9 @@ const LoginModule = () => {
                     </button>
 
                     <div>
-                        <h2 className=' my-2'>Don’t have account? <span className=' text-red-500 hover:underline cursor-pointer'>Sign up</span></h2>
+                        <h2 className=' my-2'>Don’t have account? <span className=' text-red-500 hover:underline cursor-pointer'
+                        onClick={()=>router.push("/Signup")}
+                        >Sign up</span></h2>
 
                     </div>
                 </div>

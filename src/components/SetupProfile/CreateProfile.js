@@ -8,22 +8,18 @@
 
 import { useState } from 'react';
 
-const CreateProfile = ({ setSelect }) => {
+const CreateProfile = ({ setSelect , FName , LName }) => {
 
    
 
-    const handleClick = () => {
-
-
-        setSelect(4);
-    };
+   
 
     return (
         <>
             <div className='container bg-white mx-auto mt-20 mb-20 w-[90%] lg:w-1/2 h-auto rounded-lg p-6 shadow-lg'>
                 <div className='flex flex-col items-center'>
                     <div className='mt-4 text-4xl text-center w-[80%] font-semibold font-sans'>
-                        <h1>Hey Adam, Ready for your next big opportunity?</h1>
+                        <h1> Hey {FName} {LName} Ready for your next big opportunity?</h1>
                     </div>
                 </div>
 
@@ -41,7 +37,7 @@ const CreateProfile = ({ setSelect }) => {
                     </div>
 
                     <button
-                        onClick={handleClick} // Set step to 1 when the profile is created
+                       onClick={() => {  setSelect(4); }}// Set step to 1 when the profile is created
                         className='bg-red-600 hover:bg-red-700 my-2 mt-9 p-2 w-[55%] rounded-full text-white font-bold text-lg'
                     >
                         Create Your Profile

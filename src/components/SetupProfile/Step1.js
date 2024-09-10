@@ -7,9 +7,7 @@ const Step1 = ({ setSelect   }) => {
 
     
 
-    const handleClick = () => {
-        setSelect(5)  
-    }
+    
 
     return (
         <>
@@ -49,7 +47,7 @@ const Step1 = ({ setSelect   }) => {
 
                 <div className='flex justify-center'>
 
-                    <button onClick={handleClick} className='bg-red-600 hover:bg-red-700 my-2 mt-12 p-2 w-[55%] rounded-full text-white  text-lg'>
+                    <button onClick={() => {  setSelect(5); }} className='bg-red-600 hover:bg-red-700 my-2 mt-12 p-2 w-[55%] rounded-full text-white  text-lg'>
                         Next
                     </button>
 
