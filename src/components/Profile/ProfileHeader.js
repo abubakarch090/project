@@ -54,7 +54,7 @@ const ProfileHeader = () => {
     <header className='flex items-center bg-black text-white p-3'>
 
     <div className='w-[40%] flex items-center mx-7 gap-7'>
-        {/* <img src={UPTECHUNT} alt="UPTECHUNT" className="h-4" /> Adjusted the height */}
+        <img src="/UPTECHUNT.png" alt="UPTECHUNT" className="h-4" />
         <input
             className="rounded-full pl-4 py-2 bg-gray-800 text-white placeholder-gray-400' "
             type="text"

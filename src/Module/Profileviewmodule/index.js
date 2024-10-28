@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CallIcon from '@mui/icons-material/Call';
 // import Review from './Review.png'
 // import Line from './Line.png'
@@ -12,19 +12,57 @@ const ProfileView = () => {
 
     const [model, setModel] = useState(false)
 
-    const currTime = new Date().toLocaleTimeString();
-    const currDate = new Date().toLocaleDateString();
+    const [data, setData]= useState({})
+    const [updatedata,setupdatadata]=useState({
+        fname:"",
+        hourlyrate:"",
+        profiledescription:"",
+    })
+
+    const [currTime, setCurrTime]=useState()
+    const [currDate, setCurrDate]= useState()
+ 
+
+    console.log(data,"data")
+
+
+
+    useEffect(() => {
+        // Set the time and date only on the client side
+        setCurrTime(new Date().toLocaleTimeString());
+        setCurrDate(new Date().toLocaleDateString());
+    }, []);
+
 
 
     const handleModel = () => {
         setModel(!model)
     }
+    
+    const handleupdate = () => {
+        if (updatedata) {
+            // Update local state
+            setData(updatedata);
+    
+            // Update local storage
+            localStorage.setItem("signupData", JSON.stringify(updatedata));
+        }
+    };
+
+    useEffect(() => {
+        const signUpData = localStorage.getItem("signupData");
+        if (signUpData) {
+            setData(JSON.parse(signUpData)); // Assuming it's stored as a JSON string
+        }
+    }, []);
     return (
         <>
 
             {
                 model && (
-                    <EditProfile handleModel={handleModel} />
+                    <EditProfile handleModel={handleModel} 
+                    handleupdate={handleupdate} 
+                    updatedata={updatedata} setupdatadata={setupdatadata}/>
                 )
             }
 
@@ -46,7 +84,7 @@ const ProfileView = () => {
                                     className=' border-2 border-blue-500'
                                 />
                                 <div className='mt-4 '>
-                                    <h1>Country</h1>
+                                    <h1>{data.country}</h1>
                                     <h2 className='text-sm'>Current Time:{currTime} </h2>
                                     <h2 className='text-sm'>Current Date:{currDate} </h2>
                                 </div>
@@ -59,7 +97,7 @@ const ProfileView = () => {
 
                             <div className='w-[60%]'>
                                 <div className='flex justify-between mt-5'>
-                                    <h1>Name</h1>
+                                    <h1>{data.fname}</h1>
 
                                     <button className='border-2 border-red-500 px-5 py-1 rounded-full bg-gray-200 hover:bg-red-300' onClick={handleModel}>Edit Profile</button>
 
@@ -80,7 +118,7 @@ const ProfileView = () => {
                                     <div className='mt-2 flex  gap-1 '>
                                         <img className='h-8' src="/public/Dollar.png" alt="" />
                                         <div>
-                                            <h1>50USD/Hr </h1>
+                                            <h1>{data.hourlyrate} </h1>
                                             <h2 className='text-sm '>Total earnings-10k USD</h2>
                                         </div>
                                     </div>
@@ -94,7 +132,7 @@ const ProfileView = () => {
                                 </div>
 
                                 <div className="explanation w-full h-32 border-1 border-black">
-                                    <p className='text-sm font-bold'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem accusamus doloribus fugit perspiciatis alias provident cupiditate excepturi ipsum ab recusandae? fugit perspiciatis alias provident cupiditate excepturi ipsum ab recusandae? fugit perspiciatis alias provident cupiditate turi ipsum ab recusandexcepturi ipsum ab recusandae?</p>
+                                    <p className='text-sm font-bold'>{data.profiledescription}</p>
                                 </div>
 
                             </div>
@@ -109,7 +147,7 @@ const ProfileView = () => {
 
                             <div class="flex items-center justify-between p-2 border-b border-gray-200">
                                 <CallIcon />
-                                <h2 class="flex-grow mx-2 mt-3">Phone Number</h2>
+                                <h2 class="flex-grow mx-2 mt-3">{data.phoneno}</h2>
                                 <a class="ml-auto text-blue-500">Verify</a>
                             </div>
                             <div class="flex items-center justify-between p-2 border-b border-gray-200">
@@ -269,8 +307,8 @@ const ProfileView = () => {
                             <hr className='mt-2' />
 
                             <div className='p-4'>
-                                <p className='font-semibold'>Master in Design | MIT</p>
-                                <p className='text-gray-600'>2019-2021</p>
+                                <p className='font-semibold'>{data.qualification} </p>
+                                <p className='text-gray-600'>{data.years}</p>
                                 <p className='mt-4 text-sm text-gray-700'>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.
@@ -304,7 +342,7 @@ const ProfileView = () => {
                     <hr className='mt-4' />
 
                     <div className="skill mt-4">
-                        <h1 className='mx-4  '>Graphic Designing</h1>
+                        <h1 className='mx-4  '>{data.addskills}</h1>
                         <hr className='mt-3' />
                         <h1 className='mx-4'>Graphic Designing</h1>
                         <hr className='mt-3' />

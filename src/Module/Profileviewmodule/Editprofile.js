@@ -1,6 +1,8 @@
 import React from 'react';
 
-const EditProfile = ({handleModel}) => {
+const EditProfile = ({handleModel,setupdatadata,updatedata,handleupdate}) => {
+//    console.log(updatedata,"setupdatadata")
+    
     return (
         <>
             <div className="h-[100vh] fixed top-0 bg-black bg-opacity-70 w-[100vw]">
@@ -10,6 +12,7 @@ const EditProfile = ({handleModel}) => {
                             className="w-full h-full p-2 rounded-lg"
                             type="text"
                             placeholder="Name"
+                            onChange={(e)=>setupdatadata({...updatedata,fname:e.target.value})}
                         />
                     </div>
                     <div className="w-[90%] m-auto mt-4 border-2 h-12 rounded-lg">
@@ -28,6 +31,8 @@ const EditProfile = ({handleModel}) => {
                             className="w-[30%] border-2 p-2 rounded-lg"
                             type="text"
                             placeholder="Rate"
+                            onChange={(e)=>setupdatadata({...updatedata,hourlyrate:e.target.value})}
+
                         />
                         <p className="mt-1 mx-2 text-slate-400 text-2xl">/hr</p>
                     </div>
@@ -36,11 +41,18 @@ const EditProfile = ({handleModel}) => {
                             className="w-full h-full p-2 rounded-lg"
                             type="text"
                             placeholder="Lorem ipsum dolor, sit amet consectetur"
+                            onChange={(e)=>setupdatadata({...updatedata,profiledescription:e.target.value})}
+
                         />
                     </div>
 
                     <div className="w-[90%] m-auto mt-4 flex justify-center gap-10">
-                        <button className="border-2 p-2 px-6 rounded-full bg-red-300 hover:bg-red-400  shadow-md hover:shadow-lg">
+                        <button className="border-2 p-2 px-6 rounded-full bg-red-300 hover:bg-red-400  shadow-md hover:shadow-lg"
+                        onClick={() => {
+                            handleupdate();
+                            handleModel();
+                        }}
+                        >
                             Save
                         </button>
                         <button className="border-2 p-2 px-6 rounded-full bg-gray-200 hover:bg-gray-500  shadow-md hover:shadow-lg" onClick={handleModel}>
