@@ -5,8 +5,18 @@ import CallIcon from '@mui/icons-material/Call';
 // import Dollar from './Dollar.png'
 import EditProfile from './Editprofile';
 import { useRouter } from 'next/router';
+import { useProfileQuery } from '@/Redux/ApiSlice'; // Assuming you have a login mutation
+import Cookies from 'js-cookie';
 
 const ProfileView = () => {
+
+    const { data:profileData, error, isLoading } = useProfileQuery();
+
+        const token = Cookies.get('token');
+
+        // console.log(token, "token")
+
+ console.log(profileData?.data, "profileData")
 
     const router = useRouter ();
 
@@ -23,7 +33,7 @@ const ProfileView = () => {
     const [currDate, setCurrDate]= useState()
  
 
-    console.log(data,"data")
+    // console.log(data,"data")
 
 
 
@@ -55,6 +65,15 @@ const ProfileView = () => {
             setData(JSON.parse(signUpData)); // Assuming it's stored as a JSON string
         }
     }, []);
+
+
+
+    useEffect(()=>{
+        if(!token){
+            router.push("/Login");
+        }
+    }, [router])
+
     return (
         <>
 
@@ -97,13 +116,16 @@ const ProfileView = () => {
 
                             <div className='w-[60%]'>
                                 <div className='flex justify-between mt-5'>
-                                    <h1>{data.fname}</h1>
+                                    <div className=' flex gap-3'>
+                                    <h1>{profileData?.data?.firstName}</h1>
+                                    <h1>{profileData?.data?.lastName}</h1>
+                                    </div>
 
                                     <button className='border-2 border-red-500 px-5 py-1 rounded-full bg-gray-200 hover:bg-red-300' onClick={handleModel}>Edit Profile</button>
 
                                 </div>
                                 <div className='w-full mt-2'>
-                                    <p className=''>User Experience Experience wdxexedxedxc dnejdnje </p>
+                                    <p className=''>{profileData?.data?.title}</p>
                                 </div>
 
                                 <div className='w-[60%] flex'>
@@ -132,7 +154,7 @@ const ProfileView = () => {
                                 </div>
 
                                 <div className="explanation w-full h-32 border-1 border-black">
-                                    <p className='text-sm font-bold'>{data.profiledescription}</p>
+                                    <p className='text-sm font-bold'>{profileData?.data?.profileDescription}</p>
                                 </div>
 
                             </div>

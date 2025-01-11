@@ -1,9 +1,9 @@
-import LoginModule from '@/Module/Loginmodule'
+import LoginModules from '@/Module/Login'
 import React from 'react'
 
 const index = () => {
   return (
-    <div> <LoginModule /> </div>
+    <div> <LoginModules /> </div>
   )
 }
 

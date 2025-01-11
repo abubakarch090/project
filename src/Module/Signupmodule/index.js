@@ -11,9 +11,12 @@ import Step5 from "@/components/SetupProfile/Step5";
 import Step6 from "@/components/SetupProfile/Step6";
 import Step7 from "@/components/SetupProfile/Step7";
 import Step8 from "@/components/SetupProfile/Step8";
+import Cookies from 'js-cookie';
 
 const Signupmodule = () => {
     const router = useRouter();
+
+            const token = Cookies.get('token');
 
     // Initialize AOS
     useEffect(() => {
@@ -50,7 +53,7 @@ const Signupmodule = () => {
         zipcode: "",
         phoneno: "",
     });
-    console.log(formData);
+    // console.log(formData);
 
     useEffect(() => {
         // Store formData in localStorage
@@ -59,7 +62,7 @@ const Signupmodule = () => {
         }
     }, [formData]);
 
-    const [select, setSelect] = useState(1); // for moving to the next page
+    const [select, setSelect] = useState(11); // for moving to the next page
 
     // Function to validate and continue with email
     const handleContinueWithEmail = () => {
@@ -67,7 +70,7 @@ const Signupmodule = () => {
         const passwordInput = document.querySelector('input[name="password"]');
         const confirmPasswordInput = document.querySelector('input[name="confirmPassword"]');
 
-        // Check validity of email and password fields
+
         if (
             emailInput.checkValidity() &&
             passwordInput.value === confirmPasswordInput.value &&
@@ -82,6 +85,13 @@ const Signupmodule = () => {
             alert("Please enter a valid email and matching passwords.");
         }
     };
+
+    useEffect(()=>{
+        if(token){
+            router.push("/Profile");
+        }
+    }, [router])
+
 
     return (
         <>

@@ -71,6 +71,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Image from "next/image"; // Next.js Image component
 import Link from "next/link"; // Next.js Link component
+import Cookies from 'js-cookie';
 
 const LandingPage = () => {
   useEffect(() => {
@@ -80,6 +81,14 @@ const LandingPage = () => {
   // const inter = Inter({ subsets: ["latin"] });
   const [isNavOpen, setIsNavOpen] = useState(false);
   const router = useRouter();
+  const token = Cookies.get('token');
+
+  useEffect(()=>{
+    if(token){
+        router.push("/Profile");
+    }
+}, [router])
+
 
   return (
     <>

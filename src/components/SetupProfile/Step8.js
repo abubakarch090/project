@@ -3,9 +3,88 @@ import { useRouter } from "next/router";
 import Back from "./Back";
 import AOS from "aos";
 import "aos/dist/aos.css"; // Import AOS styles
+import { toast } from "react-toastify";
+import { useSignupMutation } from '@/Redux/ApiSlice';
+
 
 const Step8 = ({ setSelect, formData, setFormData }) => {
+
+    const [signup] = useSignupMutation()
+
+    console.log(formData, "formData")
     const router = useRouter();
+
+
+
+    const handleClick = async () => {
+        console.log("ok");
+    
+        // Create the payload for signup
+        let payload = {
+            username: formData.username,  // Directly use username from formData
+            email: formData.email,
+            password: formData.password,
+            freelancer: formData.freelancer === "Freelancer" ? true : false,
+            firstName: formData.fname,
+            lastName: formData.lname,
+            country: formData.country,
+            title: formData.jobtitle,
+            experience: JSON.stringify({  // Ensure experience is an object with job title, company, and duration
+                jobTitle: formData.jobtitle,
+                company: formData.company,
+                duration: formData.duration,
+            }),
+            noExperience: formData.noExperience === "true" ? true : false,  // Example: if `noExperience` is a checkbox value
+            education: JSON.stringify({
+                qualification: formData.qualification,
+                certificates: formData.certificates,
+                years: formData.years,
+            }),
+            language: formData.language,
+            skills: formData.skillstitle,
+            profileDescription: formData.profileDescription,
+            hourlyRate: formData.hourlyRate,
+            contactInformation: JSON.stringify({
+                firstName: formData.fname,
+                lastName: formData.lname,
+                address: formData.address,
+                city: formData.city,
+                country: formData.country,
+                zipCode: formData.zipcode,
+                phone: formData.phoneno,
+            }),
+        };
+    
+        try {
+            // Assuming `signup` is a Redux action or a function handling the API call
+            const response = await signup(payload).unwrap();
+            console.log('Post added successfully:', response);
+    
+            // Check the response (assuming response contains a success message)
+            if (response?.message) {
+                toast.success(response?.message);
+    
+                // Redirect to the Login page after successful signup
+                router.push('/Login');
+            } else {
+                toast.error(response?.message || response?.error);
+            }
+        } catch (err) {
+            // Handle errors from the API call
+            toast.error(err?.data?.message);
+    
+            // Check if error is related to existing username or email
+            if (err?.data?.message === "Username already taken, please choose a different one") {
+                setSelect();
+            }
+            if (err?.data?.message === "Email already in use") {
+                setSelect(1);
+            }
+    
+            console.log(err, "err");
+        }
+    };
+    
 
     useEffect(() => {
         AOS.init({ duration: 1000 }); // Initialize AOS with 1000ms duration
@@ -118,7 +197,7 @@ const Step8 = ({ setSelect, formData, setFormData }) => {
                 <div className='flex justify-center' data-aos="fade-up">
                     <button
                         className='bg-red-600 hover:bg-red-700 my-2 mt-12 p-2 w-[55%] rounded-full text-white text-lg'
-                        onClick={() => router.push("/Profile")}
+                        onClick={handleClick}
                     >
                         Next
                     </button>
