@@ -72,7 +72,9 @@ const ProfileView = () => {
         if(!token){
             router.push("/Login");
         }
-    }, [router])
+    }, [router.pathname])
+
+    console.log(token, "token")
 
     return (
         <>
@@ -169,7 +171,7 @@ const ProfileView = () => {
 
                             <div class="flex items-center justify-between p-2 border-b border-gray-200">
                                 <CallIcon />
-                                <h2 class="flex-grow mx-2 mt-3">{data.phoneno}</h2>
+                                <h2 class="flex-grow mx-2 mt-3">{profileData?.data?.contactInformation?.phone}</h2>
                                 <a class="ml-auto text-blue-500">Verify</a>
                             </div>
                             <div class="flex items-center justify-between p-2 border-b border-gray-200">
