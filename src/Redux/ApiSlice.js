@@ -56,6 +56,19 @@ export const apiSlice = createApi({
         },
       }),
     }),
+
+
+    profile: builder.query({
+      query: () => ({
+        url: '/profileUpdate', 
+        method: 'PUT', 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }),
+    }),
+
+
   }),
 });
 

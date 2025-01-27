@@ -12,11 +12,13 @@ const ProfileView = () => {
 
     const { data:profileData, error, isLoading } = useProfileQuery();
 
+
+
         const token = Cookies.get('token');
 
         // console.log(token, "token")
 
- console.log(profileData?.data, "profileData")
+ console.log(profileData, "profileData")
 
     const router = useRouter ();
 
@@ -119,15 +121,15 @@ const ProfileView = () => {
                             <div className='w-[60%]'>
                                 <div className='flex justify-between mt-5'>
                                     <div className=' flex gap-3'>
-                                    <h1>{profileData?.data?.firstName}</h1>
-                                    <h1>{profileData?.data?.lastName}</h1>
+                                    <h1>{profileData?.user?.firstName}</h1>
+                                    <h1>{profileData?.user?.lastName}</h1>
                                     </div>
 
                                     <button className='border-2 border-red-500 px-5 py-1 rounded-full bg-gray-200 hover:bg-red-300' onClick={handleModel}>Edit Profile</button>
 
                                 </div>
                                 <div className='w-full mt-2'>
-                                    <p className=''>{profileData?.data?.title}</p>
+                                    <p className=''>{profileData?.user?.title}</p>
                                 </div>
 
                                 <div className='w-[60%] flex'>
@@ -156,7 +158,7 @@ const ProfileView = () => {
                                 </div>
 
                                 <div className="explanation w-full h-32 border-1 border-black">
-                                    <p className='text-sm font-bold'>{profileData?.data?.profileDescription}</p>
+                                    <p className='text-sm font-bold'>{profileData?.user?.profileDescription}</p>
                                 </div>
 
                             </div>
@@ -171,7 +173,7 @@ const ProfileView = () => {
 
                             <div class="flex items-center justify-between p-2 border-b border-gray-200">
                                 <CallIcon />
-                                <h2 class="flex-grow mx-2 mt-3">{profileData?.data?.contactInformation?.phone}</h2>
+                                <h2 class="flex-grow mx-2 mt-3">{profileData?.user?.contactInformation?.phone}</h2>
                                 <a class="ml-auto text-blue-500">Verify</a>
                             </div>
                             <div class="flex items-center justify-between p-2 border-b border-gray-200">

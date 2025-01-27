@@ -1,59 +1,27 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Back from "./Back";
 import AOS from "aos";
 import "aos/dist/aos.css"; // Import AOS styles
 import { toast } from "react-toastify";
 import { useSignupMutation } from '@/Redux/ApiSlice';
+import React, { useRef } from 'react';
+
 
 const Step8 = ({ setSelect, formData, setFormData }) => {
-    const [signup] = useSignupMutation();
-    const router = useRouter();
-    const fileInputRef = useRef(null);
-    const [profileImage, setProfileImage] = useState(null); // Store uploaded image URL
 
-    const handleImage = () => {
-        const fileInput = fileInputRef.current;
-    
-        // Check if a file is selected
-        if (fileInput && fileInput.files[0]) {
-            const formData = new FormData();
-            formData.append('image', fileInput.files[0]); // 'image' is the field name
-    
-            fetch('http://localhost:3000/api/auth/upload-image', {
-                method: 'POST',
-                body: formData,
-            })
-                .then(async (response) => {
-                    // Await for the response.json() to get the JSON response
-                    console.log(response, "response");
-                    const data = await response.json();
-                    console.log(data, "response");
-    
-                    if (data?.imageUrl) {
-                        // Successfully received the image URL from the backend
-                        setProfileImage(data.imageUrl); // Set the image URL in state
-                    } else {
-                        toast.error('Failed to upload image');
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error uploading image:', error);
-                    toast.error('Error uploading image');
-                });
-        } else {
-            console.error('No file selected');
-            toast.error('Please select an image');
-        }
-    };
-    
+    const [signup] = useSignupMutation()
+
+    console.log(formData, "formData")
+    const router = useRouter();
+
+
 
     const handleClick = async () => {
         console.log("ok");
-
+    
         // Create the payload for signup
         let payload = {
-            username: formData.username,  // Directly use username from formData
             email: formData.email,
             password: formData.password,
             freelancer: formData.freelancer === "Freelancer" ? true : false,
@@ -85,35 +53,69 @@ const Step8 = ({ setSelect, formData, setFormData }) => {
                 zipCode: formData.zipcode,
                 phone: formData.phoneno,
             }),
-            profileImage, // Add uploaded image URL to the payload
         };
-
+    
         try {
+            // Assuming `signup` is a Redux action or a function handling the API call
             const response = await signup(payload).unwrap();
             console.log('Post added successfully:', response);
-
+    
+            // Check the response (assuming response contains a success message)
             if (response?.message) {
                 toast.success(response?.message);
+    
+                // Redirect to the Login page after successful signup
                 router.push('/Login');
             } else {
                 toast.error(response?.message || response?.error);
             }
         } catch (err) {
+            // Handle errors from the API call
             toast.error(err?.data?.message);
-
+    
+            // Check if error is related to existing username or email
             if (err?.data?.message === "Username already taken, please choose a different one") {
-                setSelect();
+                setSelect(1);
             }
             if (err?.data?.message === "Email already in use") {
                 setSelect(1);
             }
-
+    
             console.log(err, "err");
         }
     };
 
+    const fileInputRef = useRef(null);<br />
+
+    // Handle Image Upload
+    const handleImage = () => {
+        const fileInput = fileInputRef.current;
+
+        // Check if a file is selected
+        if (fileInput && fileInput.files[0]) {
+            const formData = new FormData();
+            formData.append('image', fileInput.files[0]); // 'image' is the field name
+
+            fetch('http://localhost:3000/api/auth/upload-image', {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Image uploaded:', data);
+                    // You can handle the response here (e.g., display the image URL)
+                })
+                .catch(error => {
+                    console.error('Error uploading image:', error);
+                });
+        } else {
+            console.error('No file selected');
+        }
+    };
+    
+
     useEffect(() => {
-        AOS.init({ duration: 1000 });
+        AOS.init({ duration: 1000 }); // Initialize AOS with 1000ms duration
     }, []);
 
     return (
@@ -141,14 +143,7 @@ const Step8 = ({ setSelect, formData, setFormData }) => {
 
                 <div className="w-[90%] mt-4" data-aos="fade-up">
                     <div className="mx-auto rounded-full border-4 w-[120px] h-[120px]">
-                        {/* Display uploaded profile image */}
-                        {profileImage ? (
-                            <img src={profileImage} alt="Profile" className="w-full h-full object-cover rounded-full" />
-                        ) : (
-                            <div className="w-full h-full bg-gray-300 rounded-full flex items-center justify-center">
-                                <span className="text-gray-600">No Image</span>
-                            </div>
-                        )}
+                        {/* Placeholder for Profile Image */}
                     </div>
 
                     <div className="mx-auto rounded-full border-2 w-[40%] h-14 mt-4">
@@ -160,7 +155,6 @@ const Step8 = ({ setSelect, formData, setFormData }) => {
                     </div>
                 </div>
 
-                {/* Other Form Fields */}
                 <div className="grid grid-cols-2 w-[90%] m-auto gap-3 mt-4">
                     <div data-aos="fade-up">
                         <h2>First Name</h2>
@@ -180,7 +174,54 @@ const Step8 = ({ setSelect, formData, setFormData }) => {
                     </div>
                 </div>
 
-                {/* More fields as per your form */}
+                <div className="w-[90%] m-auto mt-4" data-aos="fade-up">
+                    <h2>Address</h2>
+                    <input
+                        className='w-full px-2 py-1 border-2 rounded-lg mt-2'
+                        type="text"
+                        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    />
+                </div>
+
+                <div className="grid grid-cols-2 w-[90%] m-auto gap-3 mt-4">
+                    <div data-aos="fade-up">
+                        <h2>Country</h2>
+                        <input
+                            type="text"
+                            className='border-2 w-full px-2 py-1 rounded-lg mt-2'
+                            placeholder="EG: Pakistan"
+                            onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                        />
+                    </div>
+                    <div data-aos="fade-up">
+                        <h2>City</h2>
+                        <input
+                            type="text"
+                            className='border-2 w-full px-2 py-1 rounded-lg mt-2'
+                            placeholder="EG: Lahore"
+                            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                        />
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 w-[90%] m-auto gap-3 mt-4">
+                    <div data-aos="fade-up">
+                        <h2>Zip code</h2>
+                        <input
+                            className='border-2 w-full px-2 py-1 rounded-lg mt-2'
+                            type="text"
+                            onChange={(e) => setFormData({ ...formData, zipcode: e.target.value })}
+                        />
+                    </div>
+                    <div data-aos="fade-up">
+                        <h2>Phone number</h2>
+                        <input
+                            className='border-2 w-full px-2 py-1 rounded-lg mt-2'
+                            type="text"
+                            onChange={(e) => setFormData({ ...formData, phoneno: e.target.value })}
+                        />
+                    </div>
+                </div>
 
                 <div className='flex justify-center' data-aos="fade-up">
                     <button
@@ -193,6 +234,7 @@ const Step8 = ({ setSelect, formData, setFormData }) => {
             </div>
         </>
     );
-};
+}
 
 export default Step8;
+

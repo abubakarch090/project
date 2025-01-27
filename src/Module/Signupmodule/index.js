@@ -62,7 +62,7 @@ const Signupmodule = () => {
         }
     }, [formData]);
 
-    const [select, setSelect] = useState(11); // for moving to the next page
+    const [select, setSelect] = useState(1); // for moving to the next page
 
     // Function to validate and continue with email
     const handleContinueWithEmail = () => {
