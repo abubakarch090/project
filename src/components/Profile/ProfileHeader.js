@@ -74,7 +74,9 @@ const ProfileHeader = () => {
             <header className='flex items-center bg-black text-white p-3'>
 
                 <div className='w-[40%] flex items-center mx-7 gap-7 cursor-pointer'>
+                    <div onClick={() => router.push("/Profile")}>
                     <img src="/UPTECHUNT.png" alt="UPTECHUNT" className="h-4" />
+                    </div>
                     <input
                         className="rounded-full pl-4 py-2 bg-gray-800 text-white placeholder-gray-400' "
                         type="text"
@@ -87,7 +89,7 @@ const ProfileHeader = () => {
                         <a href="#" className='hover:underline text-gray-400'
                             onClick={() => router.push("/Jobsearch")}
                         >Browse projects</a>
-                        <a href="#" className='hover:underline text-gray-400'>My Jobs</a>
+                        <a href="#" className='hover:underline text-gray-400' onClick={() => router.push("/Jobcreated")}> Jobs Post </a>
                         <a href="#" className='hover:underline text-gray-400'>Messages</a>
                     </nav>
                 </div>
