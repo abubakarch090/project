@@ -1,10 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Profiledata from './Components/Profiledata';
 import Recentdata from './Components/Recentdata';   
+import { useProfileQuery, useGetJobsQuery } from '@/Redux/ApiSlice'; // Assuming you have a login mutation
 
-const DataContainer = () => {
+
+const DataContainer = ({value}) => {
+
+
 
     const [selectedCategory, setSelectedCategory] = useState('Best Match');
+
+    const { data:jobsData} = useGetJobsQuery();
+    const [data, setData] = useState(jobsData?.user)
+
+    const filter = () => {
+        if (!jobsData?.jobs) return; // اگر jobsData موجود نہ ہو تو کچھ نہ کرے
+    
+        const filteredData = jobsData.jobs.filter((val) => 
+            val?.jobTitle?.toLowerCase().includes(value.toLowerCase()) // `value` کو چیک کریں
+        );
+    
+        setData(filteredData);
+    };
+    
+    useEffect(() => {
+        filter();
+    }, [value, jobsData]);
+    
+
+ console.log(jobsData, "jobsData")
 
     return (
         <>
@@ -25,14 +49,24 @@ const DataContainer = () => {
             <hr className='mt-2' /> 
 
             <div className='mt-4'>
-                {selectedCategory === 'Best Match' && Profiledata.map((profile) => {
+                {selectedCategory === 'Best Match' && data?.map((job) => {
                     return (
                         <>
                         
                         <div  className='border p-4 mb-4 rounded-lg shadow'>
-                        <h2 className='text-xl font-bold'>{profile.heading}</h2>
-                        <h3 className='text-gray-600'>{profile.subheading}</h3>
-                        <p className='text-gray-800'>{profile.explain}</p>
+                        <div className=' flex justify-between'>
+                        <h2 className='text-xl font-bold'>{job?.jobTitle}</h2>
+                        <h2 className='text-sm'>{job?.createdAt}</h2>
+                        </div>
+                        <h3 className='text-gray-600'>{job?.description}</h3>
+                        <p className='text-gray-800'>{job?.skills}</p>
+                        <p className='text-gray-800'>{job?.expertise}</p>
+                        <div className=' flex justify-between'>
+                        <p className='text-gray-800'>from {job?.fromHourlyRate}</p>
+                        <p className='text-gray-800'> to {job?.toHourlyRate}</p>
+                        <p className='text-gray-800'> Fixed Price {job?.priceFixed}</p>
+
+                        </div>
                     </div>
                 
                         
@@ -41,19 +75,27 @@ const DataContainer = () => {
                 })}
                    
 
-                {selectedCategory === 'Recent' && Recentdata.map((recent) => {
-                    return (
-                        <>
-                         <div className='border p-4 mb-4 rounded-lg shadow'>
-                        <h2 className='text-xl font-bold'>{recent.heading}</h2>
-                        <h3 className='text-gray-600'>{recent.subheading}</h3>
-                        <p className='text-gray-800'>{recent.explain}</p>
-                    </div>
-                        </>
-                    )
-                })
-                   
-                }
+                   {selectedCategory === 'Recent' && 
+    data
+        ?.filter((job) => job?.expertise === 'Intermediate') // Filter jobs with 'Intermediate' expertise
+        ?.map((job) => (
+            <div key={job?.id} className='border p-4 mb-4 rounded-lg shadow'>
+                <div className='flex justify-between'>
+                    <h2 className='text-xl font-bold'>{job?.jobTitle}</h2>
+                    <h2 className='text-sm'>{job?.createdAt}</h2>
+                </div>
+                <h3 className='text-gray-600'>{job?.description}</h3>
+                <p className='text-gray-800'>{job?.skills}</p>
+                <p className='text-gray-800'>{job?.expertise}</p>
+                <div className='flex justify-between'>
+                    <p className='text-gray-800'>From ${job?.fromHourlyRate}</p>
+                    <p className='text-gray-800'>To ${job?.toHourlyRate}</p>
+                    <p className='text-gray-800'>Fixed Price: ${job?.priceFixed}</p>
+                </div>
+            </div>
+        ))
+}
+
             </div>
         </>
     );

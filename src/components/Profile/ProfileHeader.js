@@ -4,11 +4,13 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie'; // js-cookie import karein
+import { useProfileQuery, useGetJobsQuery } from '@/Redux/ApiSlice'; // Assuming you have a login mutation
 
 
 const ProfileHeader = () => {
 
     const router = useRouter();
+    const { data:profileData, error, isLoading } = useProfileQuery();
 
     const [profile, setProfile] = useState(false)
     const openProfile = () => {
@@ -34,7 +36,7 @@ const ProfileHeader = () => {
             {profile && (
                 <div className='border-2 rounded-lg h-auto w-40 mx-2 bg-white absolute top-14 right-20 p-3 cursor-pointer'>
                     <h1 className='py-1 cursor-pointer'
-                        onClick={() => router.push("/Profilepublic")}
+                        onClick={() => router.push("/Profile")}
                     >My profile</h1>
                     <h1 className='py-1'>My wallet</h1>
                     <h1 className='py-1'>Setting</h1>
@@ -95,7 +97,8 @@ const ProfileHeader = () => {
                         onClick={openNotification}
                     />
                     <img
-                        src="https://via.placeholder.com/40"
+src={profileData?.data?.profileImage ? profileData?.data?.profileImage : "/profile.jpg"}
+                    
                         alt="Profile"
                         className='rounded-full w-10 h-10 border-2 border-blue-500 cursor-pointer'
                         onClick={openProfile}

@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 // import ProfileHeader from './ProfileHeader'
 import SearchIcon from '@mui/icons-material/Search';
 import { useRouter } from 'next/router';
-
+import DataContainer from '../Publicprofile/Datacontainer';
 const SearchJob = () => {
     const router = useRouter ();
+
+    const [value, setValue] = useState("")
     return (
         <>
             {/* <ProfileHeader /> */}
@@ -12,7 +14,7 @@ const SearchJob = () => {
             <div className="container bg-blue-500 w-full flex flex-col items-center h-64">
                 <div className="w-[80%] mt-5">
                     <div className="flex space-x-1">
-                        <input className="w-full bg-white rounded-lg p-3 px-6" type="text"  placeholder="Search job"/>
+                        <input className="w-full bg-white rounded-lg p-3 px-6" type="text"  placeholder="Search job" onChange={(e)=>setValue(e.target.value)} />
                         
                         <button className="border-2 p-2 rounded-md bg-red-400 hover:bg-gray-400 font-semibold text-white flex items-center">
                             <SearchIcon />
@@ -126,7 +128,7 @@ const SearchJob = () => {
 
                     <div className='w-[70%] bg-white h-96 mt-20 rounded-lg shadow-lg'>
                         {/* Top Results */}
-                        <div className="flex justify-between items-center p-4 bg-gray-100 rounded-t-lg">
+                        <div className="flex justify-between items-center p-4 h-[30vh] bg-gray-100 rounded-t-lg">
                             <div className="text-sm text-gray-700 font-medium">
                                 Top results Showing 1-20 of 3291 results
                             </div>
@@ -138,16 +140,19 @@ const SearchJob = () => {
                             </div>
                         </div>
                         <hr />
-                            <div className="data">
+                            <div className="data mb-10">
                                 <button className='bg-red-400'
                                 onClick={()=>router.push("/Detailsjob")}
                                 >Submit Job Proposal</button>
                             </div>
+                            <DataContainer value={value}/> 
 
                     </div>
 
 
                 </div>
+
+
             </div>
 
 

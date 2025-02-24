@@ -1,69 +1,93 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useProfileUpdateMutation } from '@/Redux/ApiSlice';
+import { toast } from 'react-toastify';
 
-const EditProfile = ({handleModel,setupdatadata,updatedata,handleupdate}) => {
-//    console.log(updatedata,"setupdatadata")
-    
-    return (
-        <>
-            <div className="h-[100vh] fixed top-0 bg-black bg-opacity-70 w-[100vw]">
-                <div className="container w-[90%] lg:w-[70%] bg-white border-2 border-black h-auto m-auto mt-16 rounded-lg shadow-lg pb-3">
-                    <div className="w-[90%] m-auto mt-8 border-2 h-12 rounded-lg">
-                        <input
-                            className="w-full h-full p-2 rounded-lg"
-                            type="text"
-                            placeholder="Name"
-                            onChange={(e)=>setupdatadata({...updatedata,fname:e.target.value})}
-                        />
-                    </div>
-                    <div className="w-[90%] m-auto mt-4 border-2 h-12 rounded-lg">
-                        <input
-                            className="w-full h-full p-2 rounded-lg"
-                            type="text"
-                            placeholder="Lorem ipsum dolor, sit amet consectetur"
-                        />
-                    </div>
+const EditProfile = ({ handleModel, setupdatadata, updatedata }) => {
+  const [updateProfile] = useProfileUpdateMutation();
+  const [formData, setFormData] = useState({
+    firstName: updatedata?.firstName || "",
+    lastName: updatedata?.lastName || "",
+    country: updatedata?.country || "",
+    profileDescription: updatedata?.profileDescription || "",
+    hourlyRate: updatedata?.hourlyRate || ""
+  });
 
-                    <div className="w-[90%] m-auto mt-2">
-                        <h1 className="text-md font-bold">Hourly Rate</h1>
-                    </div>
-                    <div className="mx-auto w-[90%] mt-4 flex">
-                        <input
-                            className="w-[30%] border-2 p-2 rounded-lg"
-                            type="text"
-                            placeholder="Rate"
-                            onChange={(e)=>setupdatadata({...updatedata,hourlyrate:e.target.value})}
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-                        />
-                        <p className="mt-1 mx-2 text-slate-400 text-2xl">/hr</p>
-                    </div>
-                    <div className="w-[90%] m-auto mt-4 border-2 h-40 rounded-lg">
-                        <input
-                            className="w-full h-full p-2 rounded-lg"
-                            type="text"
-                            placeholder="Lorem ipsum dolor, sit amet consectetur"
-                            onChange={(e)=>setupdatadata({...updatedata,profiledescription:e.target.value})}
+  const handleSubmit = async () => {
+    try {
+      const response = await updateProfile(formData).unwrap();
+      toast.success(response?.message || "Profile updated successfully");
+      handleModel();
+    } catch (err) {
+      toast.error(err?.data?.message || "Error updating profile");
+    }
+  };
 
-                        />
-                    </div>
-
-                    <div className="w-[90%] m-auto mt-4 flex justify-center gap-10">
-                        <button className="border-2 p-2 px-6 rounded-full bg-red-300 hover:bg-red-400  shadow-md hover:shadow-lg"
-                        onClick={() => {
-                            handleupdate();
-                            handleModel();
-                        }}
-                        >
-                            Save
-                        </button>
-                        <button className="border-2 p-2 px-6 rounded-full bg-gray-200 hover:bg-gray-500  shadow-md hover:shadow-lg" onClick={handleModel}>
-                            Cancel
-                        </button>
-
-                    </div>
-                </div>
-            </div>
-        </>
-    );
+  return (
+    <div className="h-screen fixed top-0 bg-black bg-opacity-70 w-full flex items-center justify-center">
+      <div className="w-[90%] lg:w-[50%] bg-white border border-gray-300 p-6 rounded-lg shadow-lg">
+        <h2 className="text-2xl font-bold text-center mb-4">Edit Profile</h2>
+        <div className="space-y-4">
+          <input
+            type="text"
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
+            placeholder="First Name"
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+          />
+          <input
+            type="text"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+            placeholder="Last Name"
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+          />
+          <input
+            type="text"
+            name="country"
+            value={formData.country}
+            onChange={handleChange}
+            placeholder="Country"
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+          />
+          <input
+            type="number"
+            name="hourlyRate"
+            value={formData.hourlyRate}
+            onChange={handleChange}
+            placeholder="Hourly Rate ($/hr)"
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+          />
+          <textarea
+            name="profileDescription"
+            value={formData.profileDescription}
+            onChange={handleChange}
+            placeholder="Profile Description"
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+          ></textarea>
+        </div>
+        <div className="flex justify-center gap-4 mt-6">
+          <button
+            onClick={handleSubmit}
+            className="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition"
+          >
+            Save
+          </button>
+          <button
+            onClick={handleModel}
+            className="bg-gray-300 px-6 py-2 rounded-lg hover:bg-gray-400 transition"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default EditProfile;

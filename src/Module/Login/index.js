@@ -48,7 +48,8 @@ const LoginModules = () => {
             console.log(response, "response")
             if(response?.message === "Login successful"){
                 toast.success(response?.message)
-                Cookies.set("token", response?.token, { expires: 1 / 24 });  // Expires in 1 hour
+                Cookies.set("token", response?.token, { expires: 1 });  // Expires in 1 day
+
 
 
                       router.push("/Profile");

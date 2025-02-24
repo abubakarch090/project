@@ -1,80 +1,60 @@
-import React from 'react'
-// import ProfileHeader from '../Tailwindprojects/ProfileHeader'
-// import Client from './Client.png';
-import VerificationSection from "@/Module/Clientprofilemodule/Verificationsection"
-import ProfileSection from "@/Module/Clientprofilemodule/Profilesection"
-import  JobCard from "@/Module/Clientprofilemodule/Jobcard"
+import { useState } from "react";
+
 const JobCreated = () => {
-    return (
-        <>
-            {/* <ProfileHeader /> */}
+  const [formData, setFormData] = useState({
+    jobTitle: "",
+    description: "",
+    estimate: "",
+    skills: "",
+    expertise: "",
+    fromHourlyRate: "",
+    toHourlyRate: "",
+    priceFixed: "",
+    imageURL: "",
+    clientName: "",
+  });
 
-            {/* Header Section */}
-            <div className='flex w-[85%] m-auto justify-between mt-4 items-center'>
-                <h1 className='text-3xl'>Welcome <span className='font-bold text-red-500'>Adam Smith</span></h1>
-                <button className='border-2 px-6 py-2 rounded-full bg-red-500 hover:bg-gray-300 text-white '>
-                    Post A New Job
-                </button>
-            </div>
-            {/* Main Content Section */}
-            <div className="w-[85%] m-auto flex mt-5 space-x-2 ">
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-                {/* Job Created */}
-                <div className='w-[70%] h-56 p-5 bg-white rounded-lg shadow-lg'>
-                    <div className='flex justify-between items-center'>
-                        <h1 className='text-lg font-semibold'>Your posting</h1>
-                        <button className='px-4 py-2 border-red-300 border-2 text-red-500 rounded-full'>
-                            View all jobs
-                        </button>
-                    </div>
-                    <hr className='mt-3' />
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/jobs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-                    <div className='mt-3'>
-                        <h2 className='text-base font-medium'>
-                            Russian Preschool Content - Categorisation
-                        </h2>
-                        <p className='text-sm text-gray-500 mt-1'>
-                            Fixed-price - Intermediate - <br />
-                            Est. Budget: $2,000 - Posted 8 hours ago
-                        </p>
-                    </div>
+      console.log(response, "response")
+      const data = await response.json();
+      console.log(data, "data")
+    } catch (error) {
+      console.error("Error posting job:", error);
+    }
+  };
 
-                    <div className='flex space-x-2 mt-1'>
-                        <div>
-                            <span className='text-gray-600 text-sm'>Proposals</span>
-                            <p className='text-lg font-semibold'>24</p>
-                        </div>
+  return (
+    <div className="max-w-lg mx-auto bg-white p-6 shadow-lg rounded-lg">
+      <h2 className="text-xl font-bold mb-4">Post a New Job</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input type="text" name="jobTitle" placeholder="Job Title" onChange={handleChange} className="w-full p-2 border rounded" />
+        <textarea name="description" placeholder="Job Description" onChange={handleChange} className="w-full p-2 border rounded"></textarea>
+        <input type="text" name="estimate" placeholder="Estimate" onChange={handleChange} className="w-full p-2 border rounded" />
+        <input type="text" name="skills" placeholder="Skills" onChange={handleChange} className="w-full p-2 border rounded" />
+        <input type="text" name="expertise" placeholder="Expertise" onChange={handleChange} className="w-full p-2 border rounded" />
+        <input type="number" name="fromHourlyRate" placeholder="From Hourly Rate" onChange={handleChange} className="w-full p-2 border rounded" />
+        <input type="number" name="toHourlyRate" placeholder="To Hourly Rate" onChange={handleChange} className="w-full p-2 border rounded" />
+        <input type="number" name="priceFixed" placeholder="Fixed Price" onChange={handleChange} className="w-full p-2 border rounded" />
+        <input type="text" name="imageURL" placeholder="Image URL" onChange={handleChange} className="w-full p-2 border rounded" />
+        <input type="text" name="clientName" placeholder="Client Name" onChange={handleChange} className="w-full p-2 border rounded" />
+        <button type="submit" className="w-full bg-red-500 text-white p-2 rounded hover:bg-red-600">Post Job</button>
+      </form>
+    </div>
+  );
+};
 
-                        <div>
-                            <span className='text-gray-600 text-sm'>Hired</span>
-                            <p className='text-lg font-semibold'>01</p>
-                        </div>
-                    </div>
-                </div>
-
-
-
-
-
-                <hr />
-
-                {/* Profile and Extra Sections */}
-                <div className="w-[30%] space-y-4 mb-3">
-
-                    {/* Profile Section */}
-                    <ProfileSection />
-
-                    {/* Verification Section */}
-                    <VerificationSection />
-
-                    {/* {job card} */}
-                    <JobCard />
-
-
-                </div>
-            </div>
-        </>
-    )
-}
-
-export default JobCreated
+export default JobCreated;

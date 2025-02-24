@@ -58,10 +58,26 @@ export const apiSlice = createApi({
     }),
 
 
-    profile: builder.query({
+    profileUpdate: builder.mutation({
+      query: (credentials) => {
+        const token = Cookies.get('token'); // Get token from cookies
+
+        return {
+          url: '/profileUpdate',
+          method: 'PUT',
+          body: credentials,
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token && { Authorization: `Bearer ${token}` }), // Add token if available
+          },
+        };
+      },
+    }),
+
+    getJobs: builder.query({
       query: () => ({
-        url: '/profileUpdate', 
-        method: 'PUT', 
+        url: '/jobs', // The endpoint for fetching profile data
+        method: 'GET', // GET request
         headers: {
           'Content-Type': 'application/json',
         },
@@ -69,8 +85,9 @@ export const apiSlice = createApi({
     }),
 
 
+
   }),
 });
 
 // Export hooks for the endpoints
-export const { useSignupMutation, useLoginMutation, useProfileQuery } = apiSlice;
+export const { useSignupMutation, useLoginMutation, useProfileQuery, useGetJobsQuery, useProfileUpdateMutation } = apiSlice;

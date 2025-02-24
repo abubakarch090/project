@@ -5,20 +5,20 @@ import CallIcon from '@mui/icons-material/Call';
 // import Dollar from './Dollar.png'
 import EditProfile from './Editprofile';
 import { useRouter } from 'next/router';
-import { useProfileQuery } from '@/Redux/ApiSlice'; // Assuming you have a login mutation
+import { useProfileQuery, useGetJobsQuery } from '@/Redux/ApiSlice'; // Assuming you have a login mutation
 import Cookies from 'js-cookie';
+
 
 const ProfileView = () => {
 
     const { data:profileData, error, isLoading } = useProfileQuery();
-
-
 
         const token = Cookies.get('token');
 
         // console.log(token, "token")
 
  console.log(profileData, "profileData")
+
 
     const router = useRouter ();
 
@@ -76,7 +76,7 @@ const ProfileView = () => {
         }
     }, [router.pathname])
 
-    console.log(token, "token")
+    // console.log(token, "token")
 
     return (
         <>
@@ -102,10 +102,12 @@ const ProfileView = () => {
                         <div className='cont1 w-[60%] h-80 bg-white mt-16 shadow-lg  rounded-lg flex '>
                             <div className='w-[25%]  bg-black h-40 mx-6 mt-5 rounded-lg' >
                                 <img
-                                    src="https://via.placeholder.com/250/400"
+                    src={profileData?.data?.profileImage ? profileData?.data?.profileImage : "/profile.jpg"}
                                     alt="Profile"
                                     className=' border-2 border-blue-500'
                                 />
+
+                                
                                 <div className='mt-4 '>
                                     <h1>{data.country}</h1>
                                     <h2 className='text-sm'>Current Time:{currTime} </h2>
@@ -121,15 +123,15 @@ const ProfileView = () => {
                             <div className='w-[60%]'>
                                 <div className='flex justify-between mt-5'>
                                     <div className=' flex gap-3'>
-                                    <h1>{profileData?.user?.firstName}</h1>
-                                    <h1>{profileData?.user?.lastName}</h1>
+                                    <h1>{profileData?.data?.firstName}</h1>
+                                    <h1>{profileData?.data?.lastName}</h1>
                                     </div>
 
                                     <button className='border-2 border-red-500 px-5 py-1 rounded-full bg-gray-200 hover:bg-red-300' onClick={handleModel}>Edit Profile</button>
 
                                 </div>
                                 <div className='w-full mt-2'>
-                                    <p className=''>{profileData?.user?.title}</p>
+                                    <p className=''>{profileData?.data?.title}</p>
                                 </div>
 
                                 <div className='w-[60%] flex'>
@@ -158,7 +160,7 @@ const ProfileView = () => {
                                 </div>
 
                                 <div className="explanation w-full h-32 border-1 border-black">
-                                    <p className='text-sm font-bold'>{profileData?.user?.profileDescription}</p>
+                                    <p className='text-sm font-bold'>{profileData?.data?.profileDescription}</p>
                                 </div>
 
                             </div>
@@ -173,7 +175,7 @@ const ProfileView = () => {
 
                             <div class="flex items-center justify-between p-2 border-b border-gray-200">
                                 <CallIcon />
-                                <h2 class="flex-grow mx-2 mt-3">{profileData?.user?.contactInformation?.phone}</h2>
+                                <h2 class="flex-grow mx-2 mt-3">{profileData?.data?.contactInformation?.phone}</h2>
                                 <a class="ml-auto text-blue-500">Verify</a>
                             </div>
                             <div class="flex items-center justify-between p-2 border-b border-gray-200">
